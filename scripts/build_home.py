@@ -18,6 +18,8 @@ BASES = [
 ]
 OURS = os.path.join(BASE, "dist", "tvbox-sites.json")
 OUT = os.path.join(BASE, "dist", "home.json")
+# 由 scripts/rank_sources.py 生成：每个源的实测响应时间与可用性
+RANK = os.path.join(BASE, "data", "source_rank.json")
 
 # 与 sync.py 保持一致：这些类别不要
 EXCLUDE_WORDS = [
@@ -46,6 +48,27 @@ def load_base():
     return None, None
 
 
+def load_rank():
+    if not os.path.exists(RANK):
+        return {}
+    try:
+        with open(RANK, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print("排名文件解析失败，忽略: %s" % e)
+        return {}
+
+
+def order_key(rank):
+    """能出结果的排前面，同组按响应时间从快到慢；没有测速数据的排最后"""
+    def _k(site):
+        r = rank.get(str(site.get("key")))
+        if not r:
+            return (2, 99999)
+        return (0 if r.get("ok") else 1, r.get("ms") or 99999)
+    return _k
+
+
 def main():
     base, src = load_base()
     if base is None:
@@ -56,6 +79,7 @@ def main():
         print("找不到 %s，先跑 sync.py" % OURS)
         return 0
     ours = json.load(open(OURS, encoding="utf-8"))
+    rank = load_rank()
 
     kept, dropped = [], []
     for s in base.get("sites", []):
@@ -68,12 +92,24 @@ def main():
     first = kept[0].get("name") if kept else None
     existing_keys = {s.get("key") for s in kept}
     added = 0
-    for s in ours.get("sites", []):
+    quick = 0
+    # 按实测速度排序：快源在前，搜索结果里自然就优先，不用每次手动换
+    for s in sorted(ours.get("sites", []), key=order_key(rank)):
         s = dict(s)
-        key = "my_" + str(s.get("key", "x"))
+        origin = str(s.get("key", "x"))
+        key = "my_" + origin
         if key in existing_keys:
             continue
         s["key"] = key
+        # 实测通不了的源不参与聚合搜索，避免每次搜索都等它超时；
+        # 单独在「数据源」里选中它时仍然可用
+        r = rank.get(origin)
+        if r is not None:
+            if r.get("ok"):
+                s["quickSearch"] = 1
+                quick += 1
+            else:
+                s["quickSearch"] = 0
         kept.append(s)
         existing_keys.add(key)
         added += 1
@@ -88,7 +124,7 @@ def main():
     print("宝盒原始站点: %d" % len(base.get("sites", [])))
     print("剔除(教育/戏曲等): %d %s" % (len(dropped), dropped))
     print("保留宝盒: %d，第一个(决定菜单): %s" % (len(kept) - added, first))
-    print("追加自建: %d" % added)
+    print("追加自建: %d（其中参与聚合搜索 %d 个）" % (added, quick))
     print("合计: %d 站" % len(kept))
     print("输出: %s (%d 字节)" % (OUT, os.path.getsize(OUT)))
     return 0
