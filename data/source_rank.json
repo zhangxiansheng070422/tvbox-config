@@ -1,0 +1,198 @@
+{
+ "360zycom": {
+  "ms": 1191,
+  "name": "🎬360 资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "apiguangsuapicom": {
+  "ms": 2509,
+  "name": "🎬光速资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "apiukuapi88com": {
+  "ms": 1416,
+  "name": "🎬U酷影视",
+  "note": "",
+  "ok": true,
+  "results": 3
+ },
+ "apiwwzytv": {
+  "ms": 8013,
+  "name": "🎬旺旺资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "bdzy1com": {
+  "ms": 48,
+  "name": "🎬百度云zy",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "bfzytv": {
+  "ms": 2749,
+  "name": "🎬暴风资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "caijimoduapicc": {
+  "ms": 283,
+  "name": "🎬魔都动漫",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "cjlzcaijicom": {
+  "ms": 443,
+  "name": "🎬量子资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "dbzytv": {
+  "ms": 203,
+  "name": "🎬豆瓣资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "dyttzyapicom": {
+  "ms": 1102,
+  "name": "🎬电影天堂",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "ffzyapicom": {
+  "ms": 5789,
+  "name": "🎬非凡资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "ikunzycom": {
+  "ms": 1396,
+  "name": "🎬iKun资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "iqiyizyapicom": {
+  "ms": 433,
+  "name": "🎬-爱奇艺-",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "jinyingzycom": {
+  "ms": 2829,
+  "name": "🎬金鹰点播",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "jszyapicom": {
+  "ms": 1399,
+  "name": "🎬极速资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "lovedannet": {
+  "ms": 22,
+  "name": "🎬艾旦影视",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "mtzyme": {
+  "ms": 171,
+  "name": "🎬茅台资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "p2100net": {
+  "ms": 7251,
+  "name": "🎬飘零资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "wolongzywcom": {
+  "ms": 1742,
+  "name": "🎬卧龙资源",
+  "note": "非 JSON",
+  "ok": false,
+  "results": 0
+ },
+ "wujinzyme": {
+  "ms": 2271,
+  "name": "🎬无尽资源",
+  "note": "HTTPError",
+  "ok": false,
+  "results": 0
+ },
+ "wwwhaohuazycom": {
+  "ms": 43,
+  "name": "🎬豪华资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "wwwhongniuzycom": {
+  "ms": 288,
+  "name": "🎬红牛资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "wwwmaoyanzycom": {
+  "ms": 1847,
+  "name": "🎬猫眼资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "wwwmoduzynet": {
+  "ms": 1052,
+  "name": "🎬魔都资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "wwwryzywcom": {
+  "ms": 45,
+  "name": "🎬如意资源",
+  "note": "URLError",
+  "ok": false,
+  "results": 0
+ },
+ "wwwsubozycom": {
+  "ms": 2096,
+  "name": "🎬速播资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "xinlangapicom": {
+  "ms": 1208,
+  "name": "🎬新浪资源",
+  "note": "",
+  "ok": true,
+  "results": 1
+ },
+ "zuidaxyz": {
+  "ms": 4254,
+  "name": "🎬最大资源",
+  "note": "",
+  "ok": true,
+  "results": 7
+ }
+}
