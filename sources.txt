@@ -1,0 +1,17 @@
+# 订阅地址清单 —— 同步服务每 6 小时读一次这个文件
+#
+# 一行一个地址，# 开头是注释，空行忽略。
+# 只接受 http:// 或 https:// 开头、返回 JSON 的地址。
+#
+# 服务对这个清单做的事：
+#   抓取 → 校验是合法 JSON 且含 sites/lives/parses/spider 之一
+#        → 按 key/name 去重后并进 api.json（只增不删）
+#        → 写前备份到 .backup/，写后 chmod 644
+#
+# 每条地址的成功/失败会显示在 8082 状态页上，单条失败不影响其他条。
+
+# 示例（删掉行首的 # 即可启用，把地址换成你自己的）：
+# https://example.com/tvbox/config.json
+
+# 你自己的 Jellyfin / Emby 如果导出过 TVBox 格式接口，也可以放这里：
+# http://192.168.18.20:8096/tvbox.json
