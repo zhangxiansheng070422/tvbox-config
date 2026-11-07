@@ -24,6 +24,7 @@ import os
 import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
@@ -67,7 +68,39 @@ def load_sources():
     return out
 
 
+def normalize_url(url):
+    """把地址规范成 urllib 能发出去的形式。
+
+    两个坑：中文域名（www.饭太硬.com）必须先转 punycode，否则 http.client
+    在编码 host 时直接抛 UnicodeEncodeError；路径里的中文要百分号编码。
+    """
+    try:
+        p = urllib.parse.urlsplit(url.strip())
+        host = p.hostname or ""
+        if not host:
+            return url
+        try:
+            host.encode("ascii")
+            ascii_host = host
+        except UnicodeEncodeError:
+            ascii_host = host.encode("idna").decode("ascii")
+        netloc = ascii_host
+        if p.port:
+            netloc += ":%d" % p.port
+        if p.username:
+            cred = p.username
+            if p.password:
+                cred += ":" + p.password
+            netloc = cred + "@" + netloc
+        path = urllib.parse.quote(p.path or "/", safe="/%:@&=+$,~!*'()")
+        query = urllib.parse.quote(p.query, safe="=&?/:@+$,%~-_.!*'()")
+        return urllib.parse.urlunsplit((p.scheme, netloc, path, query, p.fragment))
+    except Exception:
+        return url
+
+
 def fetch_text(url):
+    url = normalize_url(url)
     req = urllib.request.Request(url, headers={
         "User-Agent": UA,
         "Accept": "application/json,text/plain,*/*",
