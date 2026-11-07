@@ -47,4 +47,10 @@ jobs:
           fi
           git add api.json sync-status.md sub/live.txt live-status.md
           git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅与直播源"
-          git push
+          # 期间若有人在网页上改过文件，push 会被拒，先 rebase 再推
+          for i in 1 2 3; do
+            git push && break
+            echo "push 被拒，第 $i 次 rebase 重试"
+            git pull --rebase --autostash origin main || exit 1
+            sleep 3
+          done
