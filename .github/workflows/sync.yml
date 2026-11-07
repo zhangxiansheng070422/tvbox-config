@@ -33,13 +33,14 @@ jobs:
         run: python -c "import json;json.load(open('api.json',encoding='utf-8'));print('api.json 合法')"
 
       - name: 提交变更
+        if: always()          # 即使抓取失败也把运行记录提交上去，方便排查
         run: |
           git config user.name  "tvbox-sync[bot]"
           git config user.email "tvbox-sync@users.noreply.github.com"
-          if git diff --quiet -- api.json; then
-            echo "api.json 无变化，跳过提交"
+          if git diff --quiet -- api.json sync-status.md; then
+            echo "配置与记录均无变化，跳过提交"
             exit 0
           fi
-          git add api.json
+          git add api.json sync-status.md
           git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅"
           git push
