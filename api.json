@@ -1,0 +1,27 @@
+{
+  "name": "我的 TVBox 配置（异地版）",
+  "version": 2,
+  "spider": "",
+  "wallpaper": "",
+  "logo": "",
+  "sites": [],
+  "lives": [
+    "./sub/live.txt"
+  ],
+  "parses": [],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv",
+    "wasu",
+    "bilibili"
+  ],
+  "ads": [],
+  "warningText": "本配置仅用于接入你拥有合法授权的片源与自建媒体库。"
+}
