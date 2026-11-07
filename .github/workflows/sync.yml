@@ -1,0 +1,45 @@
+name: sync-sources
+
+# 定时把 sources.txt 里的订阅合并进 api.json，并提交回仓库。
+# 电脑关机也照跑，因为跑在 GitHub 的机器上。
+
+on:
+  schedule:
+    # 每 6 小时一次（UTC）。北京时间 = UTC+8，所以是 02:20 / 08:20 / 14:20 / 20:20
+    - cron: "20 */6 * * *"
+  workflow_dispatch: {}   # 支持在 Actions 页面手动点一次
+
+permissions:
+  contents: write         # 需要写权限才能把结果提交回仓库
+
+concurrency:
+  group: sync-sources
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 抓取并合并
+        run: python scripts/sync.py
+
+      - name: 配置合法性检查
+        run: python -c "import json;json.load(open('api.json',encoding='utf-8'));print('api.json 合法')"
+
+      - name: 提交变更
+        run: |
+          git config user.name  "tvbox-sync[bot]"
+          git config user.email "tvbox-sync@users.noreply.github.com"
+          if git diff --quiet -- api.json; then
+            echo "api.json 无变化，跳过提交"
+            exit 0
+          fi
+          git add api.json
+          git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅"
+          git push
