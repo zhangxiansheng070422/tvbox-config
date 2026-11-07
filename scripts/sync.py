@@ -21,6 +21,7 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API_PATH = os.path.join(ROOT, "api.json")
+CONFIG_PATH = os.path.join(ROOT, "config.json")
 SOURCES_PATH = os.path.join(ROOT, "sources.txt")
 STATUS_PATH = os.path.join(ROOT, "sync-status.md")
 STATUS_KEEP = 20
@@ -227,9 +228,13 @@ def main():
 
     merged["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     merged["updatedBy"] = "github-actions"
-    with open(API_PATH, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(json.dumps(merged, ensure_ascii=False, indent=2) + "\n")
-    print("已写入 api.json")
+    payload = json.dumps(merged, ensure_ascii=False, indent=2) + "\n"
+    # api.json 和 config.json 内容始终一致：
+    # config.json 是电视端在用的地址（新路径，CDN 缓存更可靠），api.json 保留兼容。
+    for path in (API_PATH, CONFIG_PATH):
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(payload)
+    print("已写入 api.json 与 config.json")
     write_status(started, "完成：已合并新内容（站点 +%d，直播 +%d）"
                  % (report_sites, report_lives), "done", len(urls), ok_count, merged)
     return 0
