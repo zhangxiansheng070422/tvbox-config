@@ -38,15 +38,19 @@ jobs:
         continue-on-error: true   # 直播源抓不到不影响主配置
         run: python scripts/sync_live.py
 
+      - name: 生成单地址合并配置（宝盒菜单 + 自建源）
+        continue-on-error: true   # 底座缺失时不阻断主流程
+        run: python scripts/build_home.py
+
       - name: 配置合法性检查
-        run: python -c "import json;json.load(open('config.json',encoding='utf-8'));json.load(open('api.json',encoding='utf-8'));print('配置合法')"
+        run: python -c "import json;json.load(open('config.json',encoding='utf-8'));json.load(open('api.json',encoding='utf-8'));json.load(open('dist/home.json',encoding='utf-8'));print('配置合法')"
 
       - name: 提交变更
         if: always()          # 即使抓取失败也把运行记录提交上去，方便排查
         run: |
           git config user.name  "tvbox-sync[bot]"
           git config user.email "tvbox-sync@users.noreply.github.com"
-          FILES="config.json api.json sync-status.md vod-status.md sub/live.txt live-status.md"
+          FILES="config.json api.json dist/home.json sync-status.md vod-status.md sub/live.txt live-status.md"
 
           commit() {
             git add -A -- $FILES
@@ -72,6 +76,7 @@ jobs:
             git reset --hard origin/main
             python scripts/sync.py || true
             python scripts/sync_live.py || true
+            python scripts/build_home.py || true
             commit || exit 0
             sleep 3
           done
