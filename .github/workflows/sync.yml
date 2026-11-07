@@ -26,8 +26,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: 抓取并合并
+      - name: 抓取并合并订阅
         run: python scripts/sync.py
+
+      - name: 抓取公开直播源
+        continue-on-error: true   # 直播源抓不到不影响主配置
+        run: python scripts/sync_live.py
 
       - name: 配置合法性检查
         run: python -c "import json;json.load(open('api.json',encoding='utf-8'));print('api.json 合法')"
@@ -37,10 +41,10 @@ jobs:
         run: |
           git config user.name  "tvbox-sync[bot]"
           git config user.email "tvbox-sync@users.noreply.github.com"
-          if git diff --quiet -- api.json sync-status.md; then
+          if git diff --quiet -- api.json sync-status.md sub/live_auto.txt live-status.md; then
             echo "配置与记录均无变化，跳过提交"
             exit 0
           fi
-          git add api.json sync-status.md
-          git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅"
+          git add api.json sync-status.md sub/live_auto.txt live-status.md
+          git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅与直播源"
           git push
