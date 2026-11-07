@@ -41,11 +41,11 @@ jobs:
         run: |
           git config user.name  "tvbox-sync[bot]"
           git config user.email "tvbox-sync@users.noreply.github.com"
-          if git diff --quiet -- api.json sync-status.md sub/live.txt live-status.md; then
+          if git diff --quiet -- api.json config.json sync-status.md sub/live.txt live-status.md; then
             echo "配置与记录均无变化，跳过提交"
             exit 0
           fi
-          git add api.json sync-status.md sub/live.txt live-status.md
+          git add api.json config.json sync-status.md sub/live.txt live-status.md
           git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新订阅与直播源"
           # 期间若有人在网页上改过文件，push 会被拒，先 rebase 再推
           for i in 1 2 3; do
