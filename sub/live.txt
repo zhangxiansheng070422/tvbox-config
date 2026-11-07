@@ -1,0 +1,17 @@
+# TVBox 直播源
+# 格式：分组行写「组名,#genre#」；频道行写「频道名,播放地址」，多个地址用逗号分隔表示多线路。
+# 只放你有权收看的地址：自建 IPTV、运营商套餐内的组播转单播、官方公开网络直播。
+# 保存为 UTF-8 无 BOM。
+
+测试频道,#genre#
+Mux 测试流,https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+Tears of Steel,https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8
+
+央视频道,#genre#
+# 示例：CCTV-1 综合,http://你的地址/cctv1.m3u8
+
+卫视频道,#genre#
+# 示例：湖南卫视,http://线路1.m3u8,http://线路2.m3u8
+
+自建频道,#genre#
+# 示例：我的 NAS 直播,http://192.168.18.20:8080/live/index.m3u8
