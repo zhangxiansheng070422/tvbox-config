@@ -376,6 +376,29 @@ def looks_adult(site):
     return any(m in name for m in ("🔞", "18+", "18＋", "成人", "里番", "无码"))
 
 
+# 不做进配置的站点类别：教育（小学/初中/高中）、戏曲、音乐、哔哩、观影、短剧。
+# 匹配站点名，大小写不敏感；命中的站点在合并阶段直接丢弃。
+EXCLUDE_WORDS = (
+    "小学", "初中", "高中", "中小学", "幼儿", "早教", "智教", "教育",
+    "戏曲", "戏剧", "京剧", "越剧",
+    "音乐", "听歌", "歌曲", "MV",
+    "哔哩", "bilibili", "b站",
+    "观影",
+    "短剧",
+)
+
+
+def excluded_reason(site):
+    """命中 EXCLUDE_WORDS 就返回命中的那个词，否则返回 None。"""
+    if not isinstance(site, dict):
+        return None
+    name = str(site.get("name") or "").lower()
+    for w in EXCLUDE_WORDS:
+        if w.lower() in name:
+            return w
+    return None
+
+
 def merge(base, incoming, allow_lives=False):
     """把 incoming 并进 base。只增不删。
 
@@ -386,9 +409,23 @@ def merge(base, incoming, allow_lives=False):
     before = (len(merged.get("sites") or []), len(merged.get("lives") or []),
               len(merged.get("parses") or []))
     new_sites = list(incoming.get("sites") or [])
-    kept = [s for s in new_sites if not looks_adult(s)]
-    if len(kept) != len(new_sites):
-        print("   （已拦下 %d 个成人向站点，不加进配置）" % (len(new_sites) - len(kept)))
+    kept = []
+    drop_adult = 0
+    drop_cat = {}
+    for s in new_sites:
+        if looks_adult(s):
+            drop_adult += 1
+            continue
+        why = excluded_reason(s)
+        if why:
+            drop_cat[why] = drop_cat.get(why, 0) + 1
+            continue
+        kept.append(s)
+    if drop_adult:
+        print("   （已拦下 %d 个成人向站点，不加进配置）" % drop_adult)
+    if drop_cat:
+        detail = "、".join("%s×%d" % (k, v) for k, v in drop_cat.items())
+        print("   （按类别剔除 %d 个站点：%s）" % (sum(drop_cat.values()), detail))
     merged["sites"] = union(merged.get("sites"), kept, ("key", "api", "name"))
     if allow_lives or not merged.get("lives"):
         merged["lives"] = union(merged.get("lives"), incoming.get("lives"),
