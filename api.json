@@ -6,7 +6,7 @@
   "logo": "",
   "sites": [],
   "lives": [
-    "./sub/live.txt"
+    "https://cdn.jsdelivr.net/gh/zhangxiansheng070422/tvbox-config@main/sub/live.txt"
   ],
   "parses": [],
   "flags": [
