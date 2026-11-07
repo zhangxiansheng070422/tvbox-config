@@ -1,0 +1,239 @@
+﻿2026-11-07T11:28:49.7702467Z Current runner version: '2.338.2'
+2026-11-07T11:28:49.7721150Z ##[group]Runner Image Provisioner
+2026-11-07T11:28:49.7721734Z Hosted Compute Agent
+2026-11-07T11:28:49.7722138Z Version: 20261028.624
+2026-11-07T11:28:49.7722546Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-07T11:28:49.7722972Z Build Date: 2026-10-28T21:51:42Z
+2026-11-07T11:28:49.7723416Z Worker ID: {71295895-6fbb-4984-9c58-e67a450a1b95}
+2026-11-07T11:28:49.7723822Z Region: westus2
+2026-11-07T11:28:49.7724169Z Cloud: Azure
+2026-11-07T11:28:49.7724529Z ##[endgroup]
+2026-11-07T11:28:49.7725314Z ##[group]Operating System
+2026-11-07T11:28:49.7725752Z Ubuntu
+2026-11-07T11:28:49.7726061Z 26.04.1
+2026-11-07T11:28:49.7726383Z LTS
+2026-11-07T11:28:49.7726907Z ##[endgroup]
+2026-11-07T11:28:49.7727282Z ##[group]Runner Image
+2026-11-07T11:28:49.7727681Z Image: ubuntu-26.04
+2026-11-07T11:28:49.7728014Z Version: 20261101.186.1
+2026-11-07T11:28:49.7728797Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-07T11:28:49.7729691Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+2026-11-07T11:28:49.7730308Z ##[endgroup]
+2026-11-07T11:28:49.7730968Z ##[group]GITHUB_TOKEN Permissions
+2026-11-07T11:28:49.7732215Z Contents: write
+2026-11-07T11:28:49.7732591Z Metadata: read
+2026-11-07T11:28:49.7732986Z ##[endgroup]
+2026-11-07T11:28:49.7734305Z Secret source: Actions
+2026-11-07T11:28:49.7735223Z Cache mode: write
+2026-11-07T11:28:49.7735676Z Prepare workflow directory
+2026-11-07T11:28:49.7945203Z Prepare all required actions
+2026-11-07T11:28:49.7978837Z Getting action download info
+2026-11-07T11:28:50.0984349Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-07T11:28:50.2262457Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-07T11:28:50.3725449Z Complete job name: sync
+2026-11-07T11:28:50.4251222Z ##[group]Run actions/checkout@v4
+2026-11-07T11:28:50.4251664Z with:
+2026-11-07T11:28:50.4251945Z   repository: zhangxiansheng070422/tvbox-config
+2026-11-07T11:28:50.4254057Z   token: ***
+2026-11-07T11:28:50.4254302Z   ssh-strict: true
+2026-11-07T11:28:50.4254546Z   ssh-user: git
+2026-11-07T11:28:50.4254796Z   persist-credentials: true
+2026-11-07T11:28:50.4255063Z   clean: true
+2026-11-07T11:28:50.4255313Z   sparse-checkout-cone-mode: true
+2026-11-07T11:28:50.4255606Z   fetch-depth: 1
+2026-11-07T11:28:50.4255841Z   fetch-tags: false
+2026-11-07T11:28:50.4256090Z   show-progress: true
+2026-11-07T11:28:50.4256342Z   lfs: false
+2026-11-07T11:28:50.4256575Z   submodules: false
+2026-11-07T11:28:50.4257069Z   set-safe-directory: true
+2026-11-07T11:28:50.4257373Z   allow-unsafe-pr-checkout: false
+2026-11-07T11:28:50.4257752Z ##[endgroup]
+2026-11-07T11:28:50.6510956Z Syncing repository: zhangxiansheng070422/tvbox-config
+2026-11-07T11:28:50.6512985Z ##[group]Getting Git version info
+2026-11-07T11:28:50.6513900Z Working directory is '/home/runner/work/tvbox-config/tvbox-config'
+2026-11-07T11:28:50.6514965Z [command]/usr/bin/git version
+2026-11-07T11:28:50.6521501Z git version 2.56.0
+2026-11-07T11:28:50.6539845Z ##[endgroup]
+2026-11-07T11:28:50.6544630Z Temporarily overriding HOME='/home/runner/work/_temp/33f56a25-b67b-46c2-8202-3082e609bf75' before making global git config changes
+2026-11-07T11:28:50.6545739Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-07T11:28:50.6548395Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tvbox-config/tvbox-config
+2026-11-07T11:28:50.6618106Z Deleting the contents of '/home/runner/work/tvbox-config/tvbox-config'
+2026-11-07T11:28:50.6622370Z ##[group]Initializing the repository
+2026-11-07T11:28:50.6626094Z [command]/usr/bin/git init /home/runner/work/tvbox-config/tvbox-config
+2026-11-07T11:28:50.6718745Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-07T11:28:50.6719838Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-07T11:28:50.6720761Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-07T11:28:50.6721857Z hint: call:
+2026-11-07T11:28:50.6722296Z hint:
+2026-11-07T11:28:50.6722828Z hint: 	git config --global init.defaultBranch <name>
+2026-11-07T11:28:50.6723416Z hint:
+2026-11-07T11:28:50.6723983Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-07T11:28:50.6724881Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-07T11:28:50.6725585Z hint:
+2026-11-07T11:28:50.6725995Z hint: 	git branch -m <name>
+2026-11-07T11:28:50.6726443Z hint:
+2026-11-07T11:28:50.6727150Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-07T11:28:50.6738941Z Initialized empty Git repository in /home/runner/work/tvbox-config/tvbox-config/.git/
+2026-11-07T11:28:50.6750265Z [command]/usr/bin/git remote add origin https://github.com/zhangxiansheng070422/tvbox-config
+2026-11-07T11:28:50.6800104Z ##[endgroup]
+2026-11-07T11:28:50.6800870Z ##[group]Disabling automatic garbage collection
+2026-11-07T11:28:50.6803753Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-07T11:28:50.6849560Z ##[endgroup]
+2026-11-07T11:28:50.6850286Z ##[group]Setting up auth
+2026-11-07T11:28:50.6851019Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-07T11:28:50.6889714Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-07T11:28:50.7348374Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-07T11:28:50.7378388Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-07T11:28:50.7607549Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-07T11:28:50.7636415Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-07T11:28:50.7862864Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-07T11:28:50.7899478Z ##[endgroup]
+2026-11-07T11:28:50.7900096Z ##[group]Fetching the repository
+2026-11-07T11:28:50.7906390Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c02984220ebdae055e7ffaab492f89b9ce93e6b9:refs/remotes/origin/main
+2026-11-07T11:28:51.0917298Z From https://github.com/zhangxiansheng070422/tvbox-config
+2026-11-07T11:28:51.0917997Z  * [new ref]         c02984220ebdae055e7ffaab492f89b9ce93e6b9 -> origin/main
+2026-11-07T11:28:51.0920176Z ##[endgroup]
+2026-11-07T11:28:51.0920783Z ##[group]Determining the checkout info
+2026-11-07T11:28:51.0926404Z ##[endgroup]
+2026-11-07T11:28:51.0928367Z [command]/usr/bin/git sparse-checkout disable
+2026-11-07T11:28:51.0973010Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-07T11:28:51.0999408Z ##[group]Checking out the ref
+2026-11-07T11:28:51.1002803Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-07T11:28:51.1063753Z Switched to a new branch 'main'
+2026-11-07T11:28:51.1067467Z branch 'main' set up to track 'origin/main'.
+2026-11-07T11:28:51.1072494Z ##[endgroup]
+2026-11-07T11:28:51.1109182Z [command]/usr/bin/git log -1 --format=%H
+2026-11-07T11:28:51.1129629Z c02984220ebdae055e7ffaab492f89b9ce93e6b9
+2026-11-07T11:28:51.1350745Z ##[group]Run actions/setup-python@v5
+2026-11-07T11:28:51.1351104Z with:
+2026-11-07T11:28:51.1351369Z   python-version: 3.12
+2026-11-07T11:28:51.1351657Z   check-latest: false
+2026-11-07T11:28:51.1353847Z   token: ***
+2026-11-07T11:28:51.1354116Z   update-environment: true
+2026-11-07T11:28:51.1354421Z   allow-prereleases: false
+2026-11-07T11:28:51.1354860Z   freethreaded: false
+2026-11-07T11:28:51.1355138Z ##[endgroup]
+2026-11-07T11:28:51.2281040Z ##[group]Installed versions
+2026-11-07T11:28:51.2361299Z (node:2458) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-07T11:28:51.2362602Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-07T11:28:51.2376096Z Successfully set up CPython (3.12.16)
+2026-11-07T11:28:51.2376873Z ##[endgroup]
+2026-11-07T11:28:51.2553293Z ##[group]Run python scripts/sync.py
+2026-11-07T11:28:51.2553928Z [36;1mpython scripts/sync.py[0m
+2026-11-07T11:28:51.2634771Z shell: /usr/bin/bash -e {0}
+2026-11-07T11:28:51.2635432Z env:
+2026-11-07T11:28:51.2635974Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:51.2636943Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-07T11:28:51.2637748Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:51.2638513Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:51.2639249Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:51.2639986Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-07T11:28:51.2640628Z ##[endgroup]
+2026-11-07T11:28:53.4882906Z 基准配置：config.json（站点 28，直播 1）
+2026-11-07T11:28:53.4883435Z sources.txt 提取到地址 1 条
+2026-11-07T11:28:53.4884233Z    https://raw.githubusercontent.com/vodtv/api/refs/heads/main/jingjian.txt 是 Base58 编码，已解出配置
+2026-11-07T11:28:53.4884792Z    （已拦下 25 个成人向站点，不加进配置）
+2026-11-07T11:28:53.4885312Z OK   https://raw.githubusercontent.com/vodtv/api/refs/heads/main/jingjian.txt  +0 站点 +0 直播
+2026-11-07T11:28:53.4885658Z 
+2026-11-07T11:28:53.4885809Z 成功 1 / 1，站点 28，直播 1
+2026-11-07T11:28:53.4886063Z 无变化，不写配置文件
+2026-11-07T11:28:53.4886341Z 已更新 sync-status.md 与 vod-status.md
+2026-11-07T11:28:53.5011264Z ##[group]Run python scripts/sync_live.py
+2026-11-07T11:28:53.5011529Z [36;1mpython scripts/sync_live.py[0m
+2026-11-07T11:28:53.5055662Z shell: /usr/bin/bash -e {0}
+2026-11-07T11:28:53.5055840Z env:
+2026-11-07T11:28:53.5056032Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:53.5056319Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-07T11:28:53.5056614Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:53.5056959Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:53.5057205Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:28:53.5057456Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-07T11:28:53.5057669Z ##[endgroup]
+2026-11-07T11:30:35.3330225Z OK   央视频道·IPv6 线路       82 条  https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u
+2026-11-07T11:30:35.3331068Z OK   中文频道总表             513 条  https://raw.githubusercontent.com/iptv-org/iptv/master/streams/cn.m3u
+2026-11-07T11:30:35.3331633Z OK   移动/咪咕线路            123 条  https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u
+2026-11-07T11:30:35.3332075Z 种子 32 台 ｜ 原始条目 718 → 频道 110，线路 199
+2026-11-07T11:30:35.3332330Z 已写入 sub/live.txt
+2026-11-07T11:30:35.3452518Z ##[group]Run python -c "import json;json.load(open('config.json',encoding='utf-8'));json.load(open('api.json',encoding='utf-8'));print('配置合法')"
+2026-11-07T11:30:35.3453054Z [36;1mpython -c "import json;json.load(open('config.json',encoding='utf-8'));json.load(open('api.json',encoding='utf-8'));print('配置合法')"[0m
+2026-11-07T11:30:35.3494439Z shell: /usr/bin/bash -e {0}
+2026-11-07T11:30:35.3494583Z env:
+2026-11-07T11:30:35.3494771Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3495019Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-07T11:30:35.3495292Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3495503Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3495723Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3496113Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-07T11:30:35.3496299Z ##[endgroup]
+2026-11-07T11:30:35.3672446Z 配置合法
+2026-11-07T11:30:35.3722649Z ##[group]Run git config user.name  "tvbox-sync[bot]"
+2026-11-07T11:30:35.3722900Z [36;1mgit config user.name  "tvbox-sync[bot]"[0m
+2026-11-07T11:30:35.3723127Z [36;1mgit config user.email "tvbox-sync@users.noreply.github.com"[0m
+2026-11-07T11:30:35.3723447Z [36;1mgit add -A -- config.json api.json sync-status.md vod-status.md sub/live.txt live-status.md[0m
+2026-11-07T11:30:35.3723725Z [36;1mif git diff --cached --quiet; then[0m
+2026-11-07T11:30:35.3723894Z [36;1m  echo "配置与记录均无变化，跳过提交"[0m
+2026-11-07T11:30:35.3724034Z [36;1m  exit 0[0m
+2026-11-07T11:30:35.3724147Z [36;1mfi[0m
+2026-11-07T11:30:35.3724318Z [36;1mgit commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新点播订阅与直播源"[0m
+2026-11-07T11:30:35.3724555Z [36;1m# 期间若有人在网页上改过文件，push 会被拒，先 rebase 再推[0m
+2026-11-07T11:30:35.3724743Z [36;1mfor i in 1 2 3; do[0m
+2026-11-07T11:30:35.3724882Z [36;1m  git push && break[0m
+2026-11-07T11:30:35.3725037Z [36;1m  echo "push 被拒，第 $i 次 rebase 重试"[0m
+2026-11-07T11:30:35.3725260Z [36;1m  git pull --rebase --autostash origin main || exit 1[0m
+2026-11-07T11:30:35.3725448Z [36;1m  sleep 3[0m
+2026-11-07T11:30:35.3725568Z [36;1mdone[0m
+2026-11-07T11:30:35.3768102Z shell: /usr/bin/bash -e {0}
+2026-11-07T11:30:35.3768253Z env:
+2026-11-07T11:30:35.3768407Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3768654Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-07T11:30:35.3768897Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3769116Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3769333Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-07T11:30:35.3769556Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-07T11:30:35.3769742Z ##[endgroup]
+2026-11-07T11:30:35.3968273Z [main 2470cd3] sync: 2026-11-07T11:30:35Z 更新点播订阅与直播源
+2026-11-07T11:30:35.3968697Z  4 files changed, 93 insertions(+), 71 deletions(-)
+2026-11-07T11:30:35.9658689Z To https://github.com/zhangxiansheng070422/tvbox-config
+2026-11-07T11:30:35.9659078Z  ! [rejected]        main -> main (fetch first)
+2026-11-07T11:30:35.9659483Z error: failed to push some refs to 'https://github.com/zhangxiansheng070422/tvbox-config'
+2026-11-07T11:30:35.9672733Z hint: Updates were rejected because the remote contains work that you do not
+2026-11-07T11:30:35.9673049Z hint: have locally. This is usually caused by another repository pushing to
+2026-11-07T11:30:35.9673316Z hint: the same ref. If you want to integrate the remote changes, use
+2026-11-07T11:30:35.9673554Z hint: 'git pull' before pushing again.
+2026-11-07T11:30:35.9673768Z hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+2026-11-07T11:30:35.9676510Z push 被拒，第 1 次 rebase 重试
+2026-11-07T11:30:36.4250555Z From https://github.com/zhangxiansheng070422/tvbox-config
+2026-11-07T11:30:36.4250933Z  * branch            main       -> FETCH_HEAD
+2026-11-07T11:30:36.4251155Z    c029842..e3ef156  main       -> origin/main
+2026-11-07T11:30:36.4354784Z Auto-merging live-status.md
+2026-11-07T11:30:36.4355009Z CONFLICT (content): Merge conflict in live-status.md
+2026-11-07T11:30:36.4355204Z Auto-merging sub/live.txt
+2026-11-07T11:30:36.4355351Z Auto-merging sync-status.md
+2026-11-07T11:30:36.4355525Z CONFLICT (content): Merge conflict in sync-status.md
+2026-11-07T11:30:36.4355711Z Auto-merging vod-status.md
+2026-11-07T11:30:36.4355865Z CONFLICT (content): Merge conflict in vod-status.md
+2026-11-07T11:30:36.4357921Z Rebasing (1/1)
+2026-11-07T11:30:36.4358570Z error: could not apply 2470cd3... sync: 2026-11-07T11:30:35Z 更新点播订阅与直播源
+2026-11-07T11:30:36.4358870Z hint: Resolve all conflicts manually, mark them as resolved with
+2026-11-07T11:30:36.4359135Z hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+2026-11-07T11:30:36.4359581Z hint: You can instead skip this commit: run "git rebase --skip".
+2026-11-07T11:30:36.4359982Z hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+2026-11-07T11:30:36.4360282Z hint: Disable this message with "git config set advice.mergeConflict false"
+2026-11-07T11:30:36.4366124Z Could not apply 2470cd3... # sync: 2026-11-07T11:30:35Z 更新点播订阅与直播源
+2026-11-07T11:30:36.4383517Z ##[error]Process completed with exit code 1.
+2026-11-07T11:30:36.4476033Z Post job cleanup.
+2026-11-07T11:30:36.5052664Z [command]/usr/bin/git version
+2026-11-07T11:30:36.5088542Z git version 2.56.0
+2026-11-07T11:30:36.5113121Z Temporarily overriding HOME='/home/runner/work/_temp/baf7bf85-db44-4224-8928-b5197923ccd7' before making global git config changes
+2026-11-07T11:30:36.5113922Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-07T11:30:36.5117085Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tvbox-config/tvbox-config
+2026-11-07T11:30:36.5154316Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-07T11:30:36.5185833Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-07T11:30:36.5436109Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-07T11:30:36.5460263Z http.https://github.com/.extraheader
+2026-11-07T11:30:36.5473874Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-07T11:30:36.5532420Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-07T11:30:36.5780718Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-07T11:30:36.5809255Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-07T11:30:36.6145003Z Cleaning up orphan processes
+2026-11-07T11:30:36.6400053Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
