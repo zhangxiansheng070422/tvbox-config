@@ -1,0 +1,20 @@
+{
+ "urls": [
+  {
+   "url": "https://cdn.jsdelivr.net/gh/zhangxiansheng070422/tvbox-config@main/config.json",
+   "name": "自建：28站+110台"
+  },
+  {
+   "url": "http://www.饭太硬.net/tv",
+   "name": "饭太硬 48站"
+  },
+  {
+   "url": "https://w.junce.dpdns.org/fm.gif",
+   "name": "肥猫 40站"
+  },
+  {
+   "url": "https://9280.kstore.vip/newwex.json",
+   "name": "放牛娃 100站"
+  }
+ ]
+}
