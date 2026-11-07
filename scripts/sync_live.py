@@ -302,8 +302,8 @@ def write_status(started, headline, detail, channel_count, kept_urls, fetched_ur
         "- **运行时间**：%s（北京时间）" % stamp,
         "- **结果**：%s" % headline,
         "- **频道数**：%d 个" % channel_count,
-        "- **线路数**：%d 条（本轮新抓到 %d 条，其余是上一版留存的备用线路）"
-        % (kept_urls, fetched_urls),
+        "- **线路数**：%d 条（本轮抓到 %d 条，每频道最多留 %d 条，其余丢弃）"
+        % (kept_urls, fetched_urls, MAX_LINES_PER_CHANNEL),
         "",
         note,
         "",
