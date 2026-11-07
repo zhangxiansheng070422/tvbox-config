@@ -23,6 +23,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -53,20 +54,53 @@ URL_RE = re.compile(r"https?://[^\s\"'<>\\,;]+")
 
 # ---------------------------------------------------------------- 抓取
 
+TRIM_TAIL = "，。；、）)】」》\"'"
+# 资源闸门：清单动辄上千条，全抓会把 runner 跑爆（Actions 有 6 小时硬超时）。
+# 这里按「同一域名最多 2 条 + 总数上限 + 总耗时上限」三重限制，
+# 超出部分不报错，只在日志和状态页里说明被略过了多少条。
+MAX_SOURCES = int(os.environ.get("TVBOX_MAX_SOURCES", "120"))
+PER_HOST_MAX = 2
+FETCH_BUDGET = int(os.environ.get("TVBOX_FETCH_BUDGET", "600"))
+
+
 def load_sources():
+    """从 sources.txt 里把地址抠出来。
+
+    允许两种写法：
+      http://a.com/x                —— 纯地址
+      饭太硬：http://a.com/x 备用    —— 带中文名称/备注
+    只要行里出现 http(s):// 就收下，一格里有多条也全收。
+    以 # 开头的整行忽略（备注用）。
+    """
     if not os.path.exists(SOURCES_PATH):
-        return []
-    out, seen = [], set()
+        return [], 0
+    raw, seen = [], set()
     with open(SOURCES_PATH, encoding="utf-8-sig") as fh:
         for line in fh:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
-            if not line.startswith(("http://", "https://")) or line in seen:
-                continue
-            seen.add(line)
-            out.append(line)
-    return out
+            for m in URL_RE.findall(line):
+                m = m.strip().rstrip(TRIM_TAIL)
+                if not m or m in seen:
+                    continue
+                seen.add(m)
+                raw.append(m)
+
+    # 同一域名最多留 2 条：清单里常见一个域名挂几十个变体，抓完也没有新站点
+    per_host, out = {}, []
+    for u in raw:
+        try:
+            host = urllib.parse.urlsplit(normalize_url(u)).hostname or u
+        except Exception:
+            host = u
+        if per_host.get(host, 0) >= PER_HOST_MAX:
+            continue
+        per_host[host] = per_host.get(host, 0) + 1
+        out.append(u)
+
+    skipped = len(raw) - min(len(out), MAX_SOURCES)
+    return out[:MAX_SOURCES], skipped
 
 
 def normalize_url(url):
@@ -534,8 +568,12 @@ def main():
         os.path.basename(src) if src else "无",
         len(current.get("sites") or []), len(current.get("lives") or [])))
 
-    urls = load_sources()
+    urls, skipped = load_sources()
     frags = load_fragments()
+    if urls:
+        print("sources.txt 提取到地址 %d 条%s" % (
+            len(urls),
+            "（另有 %d 条因单域名上限/总量上限略过）" % skipped if skipped else ""))
     if not urls and not frags:
         print("sources.txt 里没有地址，sites/ 里也没有片段，跳过本轮")
         if not args.dry_run:
@@ -545,7 +583,13 @@ def main():
         return 0
 
     results = []
-    for u in urls:
+    deadline = time.time() + FETCH_BUDGET
+    stopped_early = 0
+    for i, u in enumerate(urls):
+        if time.time() > deadline:
+            stopped_early = len(urls) - i
+            print("已达抓取时限 %d 秒，剩余 %d 条本轮不再抓" % (FETCH_BUDGET, stopped_early))
+            break
         expand(u, 0, set(), results)
 
     merged, ok_count, adds = current, 0, {"sites_added": 0, "lives_added": 0}
