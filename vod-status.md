@@ -6,41 +6,41 @@
 
 ## 概况
 
-- **检查时间**：2026-11-07 19:24（北京时间）
-- **点播站点**：28 个（正常 21 / 待观察 1 / 连不上 6 / 未探测 0）
+- **检查时间**：2026-11-07 19:26（北京时间）
+- **点播站点**：28 个（正常 0 / 待观察 0 / 连不上 0 / 未探测 28）
 
 ## 明细
 
 | 站点 | 类型 | 状态 | 说明 | 接口域名 |
 | --- | --- | --- | --- | --- |
-| 🎬-爱奇艺- | 1 | 正常 | HTTP 200 | iqiyizyapi.com |
-| 🎬豆瓣资源 | 1 | 连不上 | 连不上 | caiji.dbzy5.com |
-| 🎬茅台资源 | 1 | 连不上 | 连不上 | caiji.maotaizy.cc |
-| 🎬卧龙资源 | 1 | 正常 | HTTP 200 | wolongzyw.com |
-| 🎬iKun资源 | 1 | 正常 | HTTP 200 | ikunzyapi.com |
-| 🎬电影天堂 | 1 | 正常 | HTTP 200 | caiji.dyttzyapi.com |
-| 🎬猫眼资源 | 1 | 正常 | HTTP 200 | api.maoyanapi.top |
-| 🎬量子资源 | 1 | 正常 | HTTP 200 | cj.lzcaiji.com |
-| 🎬360 资源 | 1 | 正常 | HTTP 200 | 360zyzz.com |
-| 🎬极速资源 | 1 | 正常 | HTTP 200 | jszyapi.com |
-| 🎬魔都资源 | 1 | 正常 | HTTP 200 | www.mdzyapi.com |
-| 🎬非凡资源 | 1 | 正常 | HTTP 200 | api.ffzyapi.com |
-| 🎬暴风资源 | 1 | 正常 | HTTP 200 | bfzyapi.com |
-| 🎬最大资源 | 1 | 正常 | HTTP 200 | api.zuidapi.com |
-| 🎬无尽资源 | 1 | 正常 | HTTP 200 | api.wujinapi.me |
-| 🎬新浪资源 | 1 | 正常 | HTTP 200 | api.xinlangapi.com |
-| 🎬旺旺资源 | 1 | 正常 | HTTP 200 | api.wwzy.tv |
-| 🎬速播资源 | 1 | 正常 | HTTP 200 | subocaiji.com |
-| 🎬金鹰点播 | 1 | 正常 | HTTP 200 | jinyingzy.com |
-| 🎬飘零资源 | 1 | 待观察 | HTTP 403 | p2100.net |
-| 🎬U酷影视 | 1 | 正常 | HTTP 200 | api.ukuapi88.com |
-| 🎬光速资源 | 1 | 正常 | HTTP 200 | api.guangsuapi.com |
-| 🎬红牛资源 | 1 | 正常 | HTTP 200 | www.hongniuzy2.com |
-| 🎬魔都动漫 | 1 | 正常 | HTTP 200 | caiji.moduapi.cc |
-| 🎬如意资源 | 1 | 连不上 | 连不上 | pz.168188.dpdns.org |
-| 🎬豪华资源 | 1 | 连不上 | 连不上 | pz.168188.dpdns.org |
-| 🎬百度云zy | 1 | 连不上 | 连不上 | pz.168188.dpdns.org |
-| 🎬艾旦影视 | 1 | 连不上 | 连不上 | pz.168188.dpdns.org |
+| 🎬-爱奇艺- | 1 | 未探测 | 未探测 | iqiyizyapi.com |
+| 🎬豆瓣资源 | 1 | 未探测 | 未探测 | caiji.dbzy5.com |
+| 🎬茅台资源 | 1 | 未探测 | 未探测 | caiji.maotaizy.cc |
+| 🎬卧龙资源 | 1 | 未探测 | 未探测 | wolongzyw.com |
+| 🎬iKun资源 | 1 | 未探测 | 未探测 | ikunzyapi.com |
+| 🎬电影天堂 | 1 | 未探测 | 未探测 | caiji.dyttzyapi.com |
+| 🎬猫眼资源 | 1 | 未探测 | 未探测 | api.maoyanapi.top |
+| 🎬量子资源 | 1 | 未探测 | 未探测 | cj.lzcaiji.com |
+| 🎬360 资源 | 1 | 未探测 | 未探测 | 360zyzz.com |
+| 🎬极速资源 | 1 | 未探测 | 未探测 | jszyapi.com |
+| 🎬魔都资源 | 1 | 未探测 | 未探测 | www.mdzyapi.com |
+| 🎬非凡资源 | 1 | 未探测 | 未探测 | api.ffzyapi.com |
+| 🎬暴风资源 | 1 | 未探测 | 未探测 | bfzyapi.com |
+| 🎬最大资源 | 1 | 未探测 | 未探测 | api.zuidapi.com |
+| 🎬无尽资源 | 1 | 未探测 | 未探测 | api.wujinapi.me |
+| 🎬新浪资源 | 1 | 未探测 | 未探测 | api.xinlangapi.com |
+| 🎬旺旺资源 | 1 | 未探测 | 未探测 | api.wwzy.tv |
+| 🎬速播资源 | 1 | 未探测 | 未探测 | subocaiji.com |
+| 🎬金鹰点播 | 1 | 未探测 | 未探测 | jinyingzy.com |
+| 🎬飘零资源 | 1 | 未探测 | 未探测 | p2100.net |
+| 🎬U酷影视 | 1 | 未探测 | 未探测 | api.ukuapi88.com |
+| 🎬光速资源 | 1 | 未探测 | 未探测 | api.guangsuapi.com |
+| 🎬红牛资源 | 1 | 未探测 | 未探测 | www.hongniuzy2.com |
+| 🎬魔都动漫 | 1 | 未探测 | 未探测 | caiji.moduapi.cc |
+| 🎬如意资源 | 1 | 未探测 | 未探测 | pz.168188.dpdns.org |
+| 🎬豪华资源 | 1 | 未探测 | 未探测 | pz.168188.dpdns.org |
+| 🎬百度云zy | 1 | 未探测 | 未探测 | pz.168188.dpdns.org |
+| 🎬艾旦影视 | 1 | 未探测 | 未探测 | pz.168188.dpdns.org |
 
 ## 怎么让它自动更新
 
