@@ -19,6 +19,7 @@
 """
 
 import argparse
+import base64
 import json
 import os
 import re
@@ -134,25 +135,93 @@ def normalize_url(url):
         return url
 
 
-def fetch_text(url):
+def loads_lenient(text):
+    """宽松解析：有些源的配置里混着 // 注释行，标准 JSON 会直接报错。"""
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        cleaned = "\n".join(
+            line for line in text.splitlines()
+            if not line.lstrip().startswith("//"))
+        return json.loads(cleaned)
+
+
+def fetch_bytes(url):
+    """取原始字节。图片夹带的配置被当文本解码会毁掉，所以单独留一条通道。"""
     url = normalize_url(url)
     req = urllib.request.Request(url, headers={
         "User-Agent": UA,
         "Accept": "application/json,text/plain,*/*",
         "Accept-Encoding": "identity",
-        "Cache-Control": "no-cache",      # 尽量绕过中间层缓存，拿到最新一版
+        "Cache-Control": "no-cache",
     })
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         raw = resp.read(MAX_BYTES + 1)
         if len(raw) > MAX_BYTES:
             raise ValueError("响应超过 %d MB" % (MAX_BYTES // 1024 // 1024))
-        charset = resp.headers.get_content_charset() or "utf-8"
-    return raw.decode(charset, errors="replace").lstrip("\ufeff")
+        charset = resp.headers.get_content_charset()
+    return raw, charset
+
+
+def fetch_text(url):
+    raw, charset = fetch_bytes(url)
+    return raw.decode(charset or "utf-8", errors="replace").lstrip("\ufeff")
+
+
+# 图片文件头：这类地址把 cfg 的 base64 接在图片数据后面，专门用来绕屏蔽
+IMAGE_MAGIC = (b"\xff\xd8\xff", b"GIF87a", b"GIF89a", b"BM",
+               b"\x89PNG\r\n", b"RIFF")
+B64_CHARS = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+
+
+def try_unwrap_image(raw):
+    """从「图片 + 标记 + base64(JSON)」里把 JSON 取出来。取不到返回 None。
+
+    实际格式是：JPEG/GIF 图片字节 + 一段随机小写标识 + "**" + base64(整个 cfg)。
+    """
+    if not raw.startswith(IMAGE_MAGIC):
+        return None
+
+    def decode_blob(blob):
+        blob = re.sub(rb"[^A-Za-z0-9+/=]", b"", blob)
+        if len(blob) < 100:
+            return None
+        blob += b"=" * (-len(blob) % 4)
+        try:
+            txt = base64.b64decode(blob, validate=False).decode("utf-8")
+        except Exception:
+            return None
+        if txt.lstrip()[:1] not in ("{", "["):
+            return None
+        try:
+            loads_lenient(txt)
+        except Exception:
+            return None
+        return txt
+
+    # 正常情况：标记在图片尾部，后面整段都是 base64
+    i = raw.rfind(b"**")
+    if i > 0:
+        tail = raw[i + 2:]
+        if tail and all(c in B64_CHARS or c in b"\r\n" for c in tail):
+            got = decode_blob(tail)
+            if got:
+                return got
+
+    # 兜底：图片二进制里可能也混着 "**"，那就从后往前找 base64 的 JSON 起点
+    B64_JSON_START = (b"eyJ", b"ew0K", b"ewoK", b"ewoJ", b"ew==")
+    starts = [p for p in range(len(raw) - 8)
+              if raw.startswith(B64_JSON_START, p)]
+    for p in reversed(starts[-20:]):
+        got = decode_blob(raw[p:])
+        if got:
+            return got
+    return None
 
 
 def parse_source(text):
     try:
-        data = json.loads(text)
+        data = loads_lenient(text)
     except json.JSONDecodeError as e:
         raise ValueError("不是合法 JSON：第 %d 行 %s" % (e.lineno, e.msg))
     if isinstance(data, list):
@@ -266,12 +335,18 @@ def expand(url, depth=0, seen=None, out=None):
     seen.add(url)
 
     try:
-        text = fetch_text(url)
+        raw, charset = fetch_bytes(url)
     except Exception as e:
         out.append({"url": url, "ok": False, "error": describe(e)})
         return out
+    text = raw.decode(charset or "utf-8", errors="replace").lstrip("\ufeff")
 
     head = text.lstrip()[:1]
+    if head not in ("{", "["):
+        unwrapped = try_unwrap_image(raw)
+        if unwrapped is not None:
+            print("   %s 是图片夹带的配置，已解出" % url)
+            text, head = unwrapped, "{"
     if head not in ("{", "["):
         wrapped = try_decode_wrapped(text)
         if wrapped is not None:
@@ -279,7 +354,7 @@ def expand(url, depth=0, seen=None, out=None):
             text, head = wrapped, "{"
     if head in ("{", "["):
         try:
-            data = json.loads(text)
+            data = loads_lenient(text)
         except json.JSONDecodeError as e:
             out.append({"url": url, "ok": False,
                         "error": "不是合法 JSON：第 %d 行 %s" % (e.lineno, e.msg)})
