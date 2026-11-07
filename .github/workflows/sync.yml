@@ -46,16 +46,34 @@ jobs:
         run: |
           git config user.name  "tvbox-sync[bot]"
           git config user.email "tvbox-sync@users.noreply.github.com"
-          git add -A -- config.json api.json sync-status.md vod-status.md sub/live.txt live-status.md
-          if git diff --cached --quiet; then
-            echo "配置与记录均无变化，跳过提交"
-            exit 0
-          fi
-          git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新点播订阅与直播源"
-          # 期间若有人在网页上改过文件，push 会被拒，先 rebase 再推
+          FILES="config.json api.json sync-status.md vod-status.md sub/live.txt live-status.md"
+
+          commit() {
+            git add -A -- $FILES
+            if git diff --cached --quiet; then
+              echo "配置与记录均无变化，跳过提交"
+              return 1
+            fi
+            git commit -m "sync: $(date -u +'%Y-%m-%dT%H:%M:%SZ') 更新点播订阅与直播源"
+            return 0
+          }
+
+          commit || exit 0
+
+          # 期间若有人在网页上改过文件，push 会被拒。
+          # 这些文件全部由脚本生成，所以不强行解决冲突，而是回到远端最新再生成一遍。
           for i in 1 2 3; do
-            git push && break
-            echo "push 被拒，第 $i 次 rebase 重试"
-            git pull --rebase --autostash origin main || exit 1
+            if git push; then
+              echo "已推送"
+              exit 0
+            fi
+            echo "push 被拒，第 $i 次：拉取远端最新后重新生成"
+            git fetch origin main
+            git reset --hard origin/main
+            python scripts/sync.py || true
+            python scripts/sync_live.py || true
+            commit || exit 0
             sleep 3
           done
+          echo "连续 3 次推送失败，留给下一轮定时任务"
+          exit 1
