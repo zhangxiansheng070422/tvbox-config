@@ -41,7 +41,8 @@ STATUS_KEEP = 20
 UA = "TVBox/2026 (+https://github.com/zhangxiansheng070422/tvbox-config)"
 TIMEOUT = 20
 MAX_BYTES = 8 * 1024 * 1024
-INDEX_MAX = 20        # 一个"地址清单"最多展开 20 条，防止被喂几千条把 runner 跑满
+INDEX_MAX = 20        # 一个文本清单最多展开 20 条，防止被喂几千条把 runner 跑满
+MULTI_MAX = 40        # 一个多仓最多取 40 个子接口
 INDEX_DEPTH = 2       # 清单套清单最多两层
 PROBE_TIMEOUT = 8
 PROBE_WORKERS = 6
@@ -138,8 +139,25 @@ def describe(e):
     return "%s: %s" % (type(e).__name__, e)
 
 
+def extract_urls(data):
+    """多仓格式 {"urls":[{"url":..,"name":..}]} → 里面的子接口地址。
+
+    多仓顶层没有 sites/lives，直接当配置会被判成非法，所以先拆一层。
+    """
+    items = data.get("urls") if isinstance(data, dict) else None
+    if not isinstance(items, list):
+        return []
+    out, seen = [], set()
+    for it in items:
+        u = it.get("url") if isinstance(it, dict) else it
+        if isinstance(u, str) and u.startswith(("http://", "https://")) and u not in seen:
+            seen.add(u)
+            out.append(u)
+    return out
+
+
 def expand(url, depth=0, seen=None, out=None):
-    """抓一个地址。是配置就收下；是纯文本清单就把里面的地址继续展开。
+    """抓一个地址。是配置就收下；是纯文本清单或多仓就把里面的地址继续展开。
 
     返回 [{"url":..., "ok":bool, "data"/"error":...}]
     """
@@ -148,7 +166,7 @@ def expand(url, depth=0, seen=None, out=None):
     if url in seen:
         return out
     if depth > INDEX_DEPTH:
-        out.append({"url": url, "ok": False, "error": "清单嵌套太深，跳过"})
+        out.append({"url": url, "ok": False, "error": "嵌套太深，跳过"})
         return out
     seen.add(url)
 
@@ -158,13 +176,31 @@ def expand(url, depth=0, seen=None, out=None):
         out.append({"url": url, "ok": False, "error": describe(e)})
         return out
 
-    if text.lstrip()[:1] in ("{", "["):
+    head = text.lstrip()[:1]
+    if head in ("{", "["):
         try:
-            data = parse_source(text)
+            data = json.loads(text)
+        except json.JSONDecodeError as e:
+            out.append({"url": url, "ok": False,
+                        "error": "不是合法 JSON：第 %d 行 %s" % (e.lineno, e.msg)})
+            return out
+
+        kids = extract_urls(data)
+        if kids:
+            if len(kids) > MULTI_MAX:
+                print("   %s 是多仓，共 %d 个子接口，只取前 %d 个"
+                      % (url, len(kids), MULTI_MAX))
+                kids = kids[:MULTI_MAX]
+            else:
+                print("   %s 是多仓，展开 %d 个子接口" % (url, len(kids)))
+            for k in kids:
+                expand(k, depth + 1, seen, out)
+            return out
+
+        try:
+            out.append({"url": url, "ok": True, "data": parse_source(text)})
         except ValueError as e:
             out.append({"url": url, "ok": False, "error": str(e)})
-        else:
-            out.append({"url": url, "ok": True, "data": data})
         return out
 
     # 不是 JSON —— 当成文本清单，把里面的地址再抓一轮
