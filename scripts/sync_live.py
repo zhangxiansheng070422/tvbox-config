@@ -28,7 +28,8 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH = os.path.join(ROOT, "sub", "live_auto.txt")
+OUT_PATH = os.path.join(ROOT, "sub", "live.txt")
+SEED_PATH = os.path.join(ROOT, "sub", "live_seed.txt")
 STATUS_PATH = os.path.join(ROOT, "live-status.md")
 
 UA = "TVBox/2026 (+https://github.com)"
@@ -36,7 +37,7 @@ FETCH_TIMEOUT = 25
 PROBE_TIMEOUT = 6
 PROBE_WORKERS = 16
 MIN_CHANNELS = 20
-MAX_LINES_PER_CHANNEL = 3
+MAX_LINES_PER_CHANNEL = 4
 STATUS_KEEP = 20
 CST = timezone(timedelta(hours=8))
 
@@ -166,6 +167,30 @@ def probe(url):
         return False
 
 
+def load_seed():
+    """读 sub/live_seed.txt —— 手工精选、逐台实测过的频道，线路永远排最前。"""
+    seed = {}
+    if not os.path.exists(SEED_PATH):
+        return seed
+    cur = None
+    with open(SEED_PATH, encoding="utf-8") as fh:
+        for raw in fh:
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            if line.endswith(",#genre#"):
+                cur = line[:-8]
+                continue
+            if cur is None:
+                continue
+            parts = line.split(",")
+            name = parts[0].strip()
+            urls = [u.strip() for u in parts[1:] if u.strip().startswith("http")]
+            if name and urls:
+                seed[(cur, canon(name))] = (name, urls)
+    return seed
+
+
 def load_previous():
     """读上一版输出，用于源站抖动时兜底。"""
     prev = {}
@@ -189,13 +214,18 @@ def load_previous():
     return prev
 
 
-def build(items, prev, do_probe, keep_missing):
+def build(items, seed, prev, do_probe, keep_missing):
     """归并 → 探测 → 返回 {分组: {频道名: [线路...]}} 与统计。
 
     探测结果只用来**排序**（能连的排前面），不用来删源：
     GitHub 的机器在境外，对国内许多直播源判断不准，误杀比留死链更糟。
     """
     urls_of, display = {}, {}
+    # 1) 种子优先：手工实测过的线路永远排在最前面
+    for key, (name, urls) in seed.items():
+        urls_of[key] = list(urls)
+        display[key] = name
+    # 2) 自动抓到的线路追加在后
     for raw_name, group, url in items:
         name = clean_name(raw_name)
         if not wanted(name):
@@ -253,9 +283,10 @@ def build(items, prev, do_probe, keep_missing):
 
 def render(grouped):
     lines = [
-        "# 自动抓取的公开直播源",
-        "# 由 GitHub Actions 每 6 小时更新一次，请勿手工编辑",
-        "# 格式：分组名,#genre# ；频道名,线路1,线路2",
+        "# TVBox 直播源",
+        "# 前半是 sub/live_seed.txt 里逐台实测过的精选线路，排在最前",
+        "# 其余由 GitHub Actions 每 6 小时从公开频道列表抓取追加",
+        "# 本文件自动生成，不要手工编辑；要固定加台请改 sub/live_seed.txt",
         "",
     ]
     channels = 0
@@ -283,8 +314,8 @@ def write_status(started, headline, detail, channel_count, kept_urls, fetched_ur
     history = ([row] + history)[:STATUS_KEEP]
 
     note = {
-        "ok": "**本轮抓到了新清单**：`sub/live_auto.txt` 已更新并自动提交，"
-              "电视端下次加载配置就能看到。",
+        "ok": "**本轮抓到了新内容**：`sub/live.txt` 已更新并自动提交，"
+              "电视端下次加载配置就能拿到。",
         "keep": "**本轮可用频道太少，判定为源站异常**，保留上一版清单没有覆盖，"
                 "等下一轮再试。",
         "fail": "**所有源都抓不到**（可能是 GitHub 网络抖动），保留上一版清单。",
@@ -294,8 +325,8 @@ def write_status(started, headline, detail, channel_count, kept_urls, fetched_ur
         "# 直播源自动抓取记录",
         "",
         "> 这个文件由 GitHub 的定时任务自动维护，每 6 小时更新一次。",
-        "> 它只负责 `sub/live_auto.txt`（自动抓来的公开频道），",
-        "> 不碰 `sub/live.txt`（那份是精挑过、逐台实测过的手工清单）。",
+        "> 它维护的是 `sub/live.txt`：",
+        "> 前半是 `sub/live_seed.txt` 里逐台实测过的精选线路，后半是自动抓取的公开频道。",
         "",
         "## 最近一次",
         "",
@@ -340,15 +371,16 @@ def main():
         write_status(started, "失败：所有源都抓不到", "fail", 0, 0, 0)
         return 0
 
+    seed = load_seed()
     prev = load_previous()
     # 有源没抓到时，按「只增不减」处理，避免源站抖动把电视上的台抹掉
     keep_missing = ok_src < len(SOURCES)
-    grouped, total_urls = build(items, prev, not args.no_probe, keep_missing)
+    grouped, total_urls = build(items, seed, prev, not args.no_probe, keep_missing)
     text, channels = render(grouped)
     kept_urls = sum(len(u) for g in grouped.values() for u in g.values())
 
-    print("原始条目 %d → 频道 %d，线路 %d%s"
-          % (len(items), channels, kept_urls,
+    print("种子 %d 台 ｜ 原始条目 %d → 频道 %d，线路 %d%s"
+          % (len(seed), len(items), channels, kept_urls,
              "  ｜源不齐，只增不减" if keep_missing else ""))
 
     if channels < MIN_CHANNELS:
