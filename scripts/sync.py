@@ -160,9 +160,70 @@ def parse_source(text):
         data = {"sites": data}
     if not isinstance(data, dict):
         raise ValueError("顶层既不是对象也不是数组")
+    if "sites" not in data and isinstance(data.get("api_site"), dict):
+        # LunaTV 一类配置的写法：{"api_site": {"域名": {"name":..,"api":..}}}
+        # 里面装的就是一堆 CMS 采集接口，转成 TVBox 的 sites 数组
+        data["sites"] = sites_from_api_site(data["api_site"])
     if not any(k in data for k in ("sites", "lives", "parses", "spider")):
         raise ValueError("缺少 sites/lives/parses/spider，判断不是配置接口")
     return data
+
+
+def sites_from_api_site(mapping):
+    out, used = [], set()
+    for domain, info in mapping.items():
+        if not isinstance(info, dict):
+            continue
+        api = info.get("api") or ("https://%s/api.php/provide/vod" % domain)
+        if not api.startswith(("http://", "https://")):
+            continue
+        key = re.sub(r"[^a-z0-9]", "", str(domain).lower())[:24] or "cms"
+        base, n = key, 1
+        while key in used:
+            n += 1
+            key = "%s%d" % (base[:20], n)
+        used.add(key)
+        site = {
+            "key": key,
+            "name": info.get("name") or domain,
+            "type": 1,
+            "api": api,
+            "searchable": 1,
+            "quickSearch": 1,
+            "filterable": 0,
+        }
+        out.append(site)
+    return out
+
+
+B58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+
+def b58decode(text):
+    """Base58 解码。有些源故意把 JSON 转成 Base58 再发布，防止直接抄。"""
+    n = 0
+    for ch in text:
+        idx = B58_ALPHABET.find(ch)
+        if idx < 0:
+            raise ValueError("不是 Base58")
+        n = n * 58 + idx
+    raw = n.to_bytes((n.bit_length() + 7) // 8, "big") if n else b""
+    return b"\x00" * (len(text) - len(text.lstrip("1"))) + raw
+
+
+def try_decode_wrapped(text):
+    """正文不是 JSON 时，试一下 Base58；解出来是 JSON 就返回它。"""
+    s = text.strip()
+    if len(s) < 40 or len(s) > 4 * 1024 * 1024:
+        return None
+    if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]+", s):
+        return None
+    try:
+        raw = b58decode(s)
+        decoded = raw.decode("utf-8")
+    except Exception:
+        return None
+    return decoded if decoded.lstrip()[:1] in ("{", "[") else None
 
 
 def describe(e):
@@ -211,6 +272,11 @@ def expand(url, depth=0, seen=None, out=None):
         return out
 
     head = text.lstrip()[:1]
+    if head not in ("{", "["):
+        wrapped = try_decode_wrapped(text)
+        if wrapped is not None:
+            print("   %s 是 Base58 编码，已解出配置" % url)
+            text, head = wrapped, "{"
     if head in ("{", "["):
         try:
             data = json.loads(text)
@@ -302,6 +368,14 @@ def union(base, new, fields):
     return out
 
 
+def looks_adult(site):
+    """成人向站点不进配置。远端清单里常混着这类，别让它在电视上弹出来。"""
+    if not isinstance(site, dict):
+        return False
+    name = str(site.get("name") or "")
+    return any(m in name for m in ("🔞", "18+", "18＋", "成人", "里番", "无码"))
+
+
 def merge(base, incoming, allow_lives=False):
     """把 incoming 并进 base。只增不删。
 
@@ -311,8 +385,11 @@ def merge(base, incoming, allow_lives=False):
     merged = dict(base or {})
     before = (len(merged.get("sites") or []), len(merged.get("lives") or []),
               len(merged.get("parses") or []))
-    merged["sites"] = union(merged.get("sites"), incoming.get("sites"),
-                            ("key", "api", "name"))
+    new_sites = list(incoming.get("sites") or [])
+    kept = [s for s in new_sites if not looks_adult(s)]
+    if len(kept) != len(new_sites):
+        print("   （已拦下 %d 个成人向站点，不加进配置）" % (len(new_sites) - len(kept)))
+    merged["sites"] = union(merged.get("sites"), kept, ("key", "api", "name"))
     if allow_lives or not merged.get("lives"):
         merged["lives"] = union(merged.get("lives"), incoming.get("lives"),
                                 ("name", "url", "api"))
