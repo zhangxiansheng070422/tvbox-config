@@ -7,7 +7,7 @@
 CCTV-1综合,http://74.91.26.218:82/live/cctv1hd.m3u8,https://liveplay-srs.voc.com.cn/hls/tv/134_180adf.m3u8,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226895/1.m3u8?,http://69.30.245.50/live/cctv1.m3u8
 CCTV-2财经,http://74.91.26.218:82/live/cctv2hd.m3u8,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226893/1.m3u8?
 CCTV-3综艺,http://74.91.26.218:82/live/cctv3hd.m3u8,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226471/1.m3u8?
-CCTV-4 Asia,http://74.91.26.218:82/live/cctv4hd.m3u8,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226335/1.m3u8?,http://198.204.240.250:82/live/cctv4k.m3u8
+CCTV-4 Europe,http://74.91.26.218:82/live/cctv4hd.m3u8,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226335/1.m3u8?,https://r.eu.cdn-redge.media/livehls/oeu/mt/live/cctv_4/live.livx/playlist.m3u8,http://198.204.240.250:82/live/cctv4k.m3u8
 CCTV-5+,https://php.jdshipin.com/TVOD/iptv.php?id=cctv5p,https://myip.pdtvhd.com/Sports/streams/CCTV5pul.m3u8
 CCTV-5体育,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226469/1.m3u8?
 CCTV-6电影,http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226468/1.m3u8?,http://69.30.245.50/live/cctv6.m3u8,http://198.204.240.250:82/live/cctv6.m3u8,https://live.eac-news.com/CCTV/streams/cctv6.m3u8
