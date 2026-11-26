@@ -6,8 +6,8 @@
 
 ## 概况
 
-- **检查时间**：2026-11-26 16:30（北京时间）
-- **点播站点**：28 个（正常 22 / 待观察 1 / 连不上 5 / 未探测 0）
+- **检查时间**：2026-11-27 05:40（北京时间）
+- **点播站点**：28 个（正常 20 / 待观察 1 / 连不上 7 / 未探测 0）
 
 ## 明细
 
@@ -31,10 +31,10 @@
 | 🎬新浪资源 | 1 | 正常 | HTTP 200 | api.xinlangapi.com |
 | 🎬旺旺资源 | 1 | 正常 | HTTP 200 | api.wwzy.tv |
 | 🎬速播资源 | 1 | 正常 | HTTP 200 | subocaiji.com |
-| 🎬金鹰点播 | 1 | 正常 | HTTP 200 | jinyingzy.com |
+| 🎬金鹰点播 | 1 | 连不上 | 连不上 | jinyingzy.com |
 | 🎬飘零资源 | 1 | 待观察 | HTTP 403 | p2100.net |
 | 🎬U酷影视 | 1 | 正常 | HTTP 200 | api.ukuapi88.com |
-| 🎬光速资源 | 1 | 正常 | HTTP 200 | api.guangsuapi.com |
+| 🎬光速资源 | 1 | 连不上 | 连不上 | api.guangsuapi.com |
 | 🎬红牛资源 | 1 | 正常 | HTTP 200 | www.hongniuzy2.com |
 | 🎬魔都动漫 | 1 | 正常 | HTTP 200 | caiji.moduapi.cc |
 | 🎬如意资源 | 1 | 连不上 | 连不上 | pz.168188.dpdns.org |
